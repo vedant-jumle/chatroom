@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Vedant's chat app</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.4/qs.js" integrity="sha512-53y53BQwxZvk4YGd9SkHPqI7nDwlIIFZ4D2BSJG08Co7y6O3YsWeRtO6trPtdoyqfTCTkTbCulNosIAI6E4UvQ==" crossorigin="anonymous"></script>
+        <style>
+            /* Add some padding on document's body to prevent the content
+            to go underneath the header and footer */
+            body{        
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+            .fixed-header, .fixed-footer{
+                width: 100%;
+                position: fixed;        
+                background: #b6b6b6;
+                padding: 10px 0;
+                color: #fff;
+            }
+            .fixed-header{
+                top: 0;
+            }
+            .fixed-footer{
+                bottom: 0;
+                padding: 15px;
+            }
+            .container{
+                width: 80%;
+                margin: 0 auto; /* Center the DIV horizontally */
+            }
+            .button_noborder{
+                border-width: 0px;
+            }
+            .chat-msg {
+                border: 2px solid #dedede;
+                background-color: #f8f7f7;
+                border-radius: 5px;
+                padding: 10px;
+                margin: 10px 0;
+            }
+
+            /* Darker chat container */
+            .darker {
+                border-color: #ccc;
+                background-color: #ddd;
+            }
+            /* Clear floats */
+            .chat-msg::after {
+                content: "";
+                clear: both;
+                display: table;
+            }
+            /* Style time text */
+            .time-right {
+                float: right;
+                color: #aaa;
+            }
+
+            /* Style time text */
+            .time-left {
+                float: left;
+                color: #999;
+            }
+            .text-right{
+                float: right;
+            }
+            .text-left{
+                float: left;
+            }
+        </style>
+    </head>
+    <body ng-app>
+
+        <div class="fixed-header">
+            <div class="container">
+                <div id="users-table">
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div id="content-chats">
+                
+            </div>
+        </div>    
+        <div class="fixed-footer">
+            <div class="container">
+                <form id="form-message">
+                    <div class="input-group">
+                        <span class="input-group-addon">Message</span>
+                        <input required id="msg" type="text" class="form-control" name="msg" placeholder="Message">
+                        <span class="input-group-addon">
+                            <button type ="submit" class="button_noborder">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-bar-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
+                                    <path fill-rule="evenodd" d="M6 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H6.5A.5.5 0 0 1 6 8zm-2.5 6a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 1 0v11a.5.5 0 0 1-.5.5z"/>
+                                </svg>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>        
+        </div>
+    </body>
+    <script defer src="/socket.io/socket.io.js"></script>
+    <script defer src="js/main.js"></script>
+</html>

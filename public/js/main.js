@@ -1,106 +1,111 @@
-const user_message_form = document.getElementById('form-message');
-const socket = io()
+const user_message_form = document.getElementById("form-message");
+const socket = io();
 const current_user = Qs.parse(location.search, {
-    ignoreQueryPrefix: true,
+  ignoreQueryPrefix: true
 }).user;
 
-socket.emit('join', current_user);
+socket.emit("join", current_user);
 
-socket.on('msg', data => {
-    console.log(data.responce);
-    updateUserList(data.users)
+socket.on("msg", data => {
+  console.log(data.responce);
+  updateUserList(data.users);
 });
 
-socket.on('chat-update', info => {
-    console.log(info);
-    updateMessages(info);
+socket.on("chat-update", info => {
+  console.log(info);
+  updateMessages(info);
 });
 
-socket.on('user-disconnect', info => {
-    console.log(info);
-    updateUserList(info.users);
-    showMessage(info.message, info.status);
+socket.on("user-disconnect", info => {
+  console.log(info);
+  updateUserList(info.users);
+  showMessage(info.message, info.status);
 });
 
-socket.on('user-join', info => {
-    console.log(info);
-    updateUserList(info.users);
-    showMessage(info.message, info.status)
+socket.on("user-join", info => {
+  console.log(info);
+  updateUserList(info.users);
+  showMessage(info.message, info.status);
 });
 
-user_message_form.addEventListener('submit', (e) => {
-    e.preventDefault();
+user_message_form.addEventListener("submit", e => {
+  e.preventDefault();
 
-    const message = e.target.elements.msg.value;
-    socket.emit('chat-message', {
-        user: current_user,
-        message: message
-    });
+  const message = e.target.elements.msg.value;
+  socket.emit("chat-message", {
+    user: current_user,
+    message: message
+  });
 
-    clearBox();
+  clearBox();
 });
 
-function updateUserList(users){
-    const list = document.getElementById('users-table');
-    var update ="";
-    users.forEach(element => {
-        update += '|'+ element + '|';
-    });
-    const static = `
-    <span id="title-user"><strong>ACTIVE USERS:</strong>    </span>
-                    <span id="user-list">${update}</span>
-                    <a href="index.html" class="btn btn-link">Leave</a>
-    `;
-    console.log(static);
+function updateUserList(users) {
+  const list = document.getElementById("users-table");
+  var update = "";
+  users.forEach(element => {
+    update += "|<strong>" +element + "</strong>|";
+  });
+  const s = `<span id="title-user" style="font-size: 15px;">ACTIVE USERS:      </span>
+                    <span id="user-list" style="font-size: 25px;">${update}</span>
+                    <a href="index.html" class="btn btn-link">Leave</a>`;
+  console.log(s);
 
-    list.innerHTML = static;
+  list.innerHTML = s;
 }
 
-function showMessage(message, status){
-    var id= 'content-chats';
-    var original = document.getElementById(id).innerHTML;
-    var update = original;
-    if(status){
-        update += `
+function showMessage(message, status) {
+  var id = "content-chats";
+  var original = document.getElementById(id).innerHTML;
+  var update = "";
+  if (status) {
+    update += `
             <div class="alert alert-info">
                 ${message} joined the chat
             </div>
         `;
-    }else{
-        update += `
+  } else {
+    update += `
             <div class="alert alert-info">
                 ${message} left the chat
             </div>
         `;
-    }
-    document.getElementById(id).innerHTML = update;
+  }
+  update += original;
+  document.getElementById(id).innerHTML = update;
+  scrollDown();
 }
 
-function updateMessages(values){
-    var id= 'content-chats';
-    var original = document.getElementById(id).innerHTML;
-    var user_you = `
+function updateMessages(values) {
+  var id = "content-chats";
+  var original = document.getElementById(id).innerHTML;
+  var user_you = `
         <div class="chat-msg">
             <label class="text-right">You</label><br>
             <h5>${values.message}          <small>${values.timestamp}</small></h3>
         </div>
     `;
-    var user_not_you = `
+  var user_not_you = `
         <div class="chat-msg darker">
             <label class="text-left">${values.user}</label><br>
             <h5>${values.message}          <small>${values.timestamp}</small></h3>
         </div>
     `;
-    var update = ``;
-    if(values.user == current_user){
-        update = original + user_you;
-    }
-    else{
-        update = original + user_not_you;
-    }
-    document.getElementById(id).innerHTML = update;
+  var update = ``;
+  if (values.user == current_user) {
+    update = user_you + original;
+  } else {
+    update = user_not_you + original;
+  }
+  document.getElementById(id).innerHTML = update;
+  scrollDown();
 }
-function clearBox(){
-    document.getElementById('msg').value = '';
-    document.getElementById('msg').focus();
+function clearBox() {
+  document.getElementById("msg").value = "";
+  document.getElementById("msg").focus();
+}
+function scrollDown() {
+  var myDiv = document.getElementById("chats");
+  window.scrollTo(0, myDiv.innerHeight);
+  console.log(myDiv.innerHeight);
 }
